@@ -23,5 +23,7 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:23.1.1'
     // Added for AdMob
+    // Specify to use only ads instead of all libs.
+    // Reducing size and doesn't need multiDexEnabled.
     compile 'com.google.android.gms:play-services-ads:8.4.0'
 }
