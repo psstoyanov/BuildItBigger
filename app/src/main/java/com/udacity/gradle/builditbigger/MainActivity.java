@@ -1,6 +1,7 @@
 package com.udacity.gradle.builditbigger;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v4.util.Pair;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -34,7 +35,9 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_settings)
+        {
+            startActivity(new Intent(this, SettingsActivity.class));
             return true;
         }
 

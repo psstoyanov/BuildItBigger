@@ -2,9 +2,10 @@ package com.udacity.gradle.builditbigger;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.support.v4.util.Pair;
-import android.widget.Toast;
+import android.preference.PreferenceManager;
+import android.util.Log;
 
 import com.example.paskalstoyanov.androidjokelib.DisplayJokes;
 import com.example.paskalstoyanov.myapplication.backend.myJokesApi.MyJokesApi;
@@ -15,16 +16,30 @@ import com.google.api.client.googleapis.services.GoogleClientRequestInitializer;
 
 import java.io.IOException;
 
+import static android.support.v4.content.res.TypedArrayUtils.getString;
+
 /**
  * Created by paskalstoyanov on 11/02/16.
  */
 class EndpointsAsyncTask extends AsyncTask<Context, Long, String> {
     private static MyJokesApi myApiService = null;
     private Context context;
+    private static final String LOG_TAG = EndpointsAsyncTask.class.getName();
 
 
     @Override
-    protected String doInBackground(Context... params) {
+    protected String doInBackground(Context... params)
+    {
+
+
+        context = params[0];
+
+        SharedPreferences sharedPrefs =
+                PreferenceManager.getDefaultSharedPreferences(context);
+        String modeType = sharedPrefs.getString(
+                context.getString(R.string.pref_connection_mode_key),
+                context.getString(R.string.pref_mode_emulator));
+
         if(myApiService == null) {  // Only do this once
             MyJokesApi.Builder builder = new MyJokesApi.Builder(AndroidHttp.newCompatibleTransport(),
                     new AndroidJsonFactory(), null)
@@ -32,7 +47,7 @@ class EndpointsAsyncTask extends AsyncTask<Context, Long, String> {
                     // - 10.0.2.2 is localhost's IP address in Android emulator
                     // - turn off compression when running against local devappserver
                     // - use the PC/Mac IP address when testing with actual device
-                    .setRootUrl("http://10.0.2.2:8080/_ah/api/")
+                    .setRootUrl(modeType)
                     // Used ifconfig -a on localhost to find IP address (*Unix system)
                     //.setRootUrl("http://192.168.1.240:8080/_ah/api/")
                     .setGoogleClientRequestInitializer(new GoogleClientRequestInitializer() {
@@ -45,7 +60,7 @@ class EndpointsAsyncTask extends AsyncTask<Context, Long, String> {
 
             myApiService = builder.build();
         }
-        context = params[0];
+
 
 
         try {
@@ -59,7 +74,7 @@ class EndpointsAsyncTask extends AsyncTask<Context, Long, String> {
     protected void onPostExecute(String result) {
         Intent tellJoke = new Intent(context, DisplayJokes.class);
         tellJoke.putExtra(DisplayJokes.EXTRA_JOKEKEY, result);
-        tellJoke.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        //tellJoke.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(tellJoke);
     }
 }

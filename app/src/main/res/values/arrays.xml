@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="pref_units_options">
+        <item>@string/pref_mode_label_emulator</item>
+        <item>@string/pref_mode_label_usb_device</item>
+    </string-array>
+
+    <string-array name="pref_units_values">
+        <item>@string/pref_mode_emulator</item>
+        <item>@string/pref_mode_usb_device</item>
+    </string-array>
+
+</resources>
