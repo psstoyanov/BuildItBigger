@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void tellJoke(View view){
-        new EndpointsAsyncTask().execute(new Pair<Context, String>(this, ""));
+        new EndpointsAsyncTask().execute(this);
         //Toast.makeText(this, JavaJokes.tellAHandCraftedJoke(), Toast.LENGTH_SHORT).show();
     }
 
