@@ -22,6 +22,7 @@ class EndpointsAsyncTask extends AsyncTask<Context, Long, String> {
     private static MyJokesApi myApiService = null;
     private Context context;
 
+
     @Override
     protected String doInBackground(Context... params) {
         if(myApiService == null) {  // Only do this once
@@ -32,6 +33,8 @@ class EndpointsAsyncTask extends AsyncTask<Context, Long, String> {
                     // - turn off compression when running against local devappserver
                     // - use the PC/Mac IP address when testing with actual device
                     .setRootUrl("http://10.0.2.2:8080/_ah/api/")
+                    // Used ifconfig -a on localhost to find IP address (*Unix system)
+                    //.setRootUrl("http://192.168.1.240:8080/_ah/api/")
                     .setGoogleClientRequestInitializer(new GoogleClientRequestInitializer() {
                         @Override
                         public void initialize(AbstractGoogleClientRequest<?> abstractGoogleClientRequest) throws IOException {
@@ -56,6 +59,7 @@ class EndpointsAsyncTask extends AsyncTask<Context, Long, String> {
     protected void onPostExecute(String result) {
         Intent tellJoke = new Intent(context, DisplayJokes.class);
         tellJoke.putExtra(DisplayJokes.EXTRA_JOKEKEY, result);
+        tellJoke.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(tellJoke);
     }
 }
