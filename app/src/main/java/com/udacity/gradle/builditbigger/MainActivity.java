@@ -12,6 +12,8 @@ import android.view.View;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final String JOKE_TOLD_KEY = "joke_launched";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

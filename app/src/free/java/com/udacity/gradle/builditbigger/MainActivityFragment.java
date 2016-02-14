@@ -1,12 +1,18 @@
 package com.udacity.gradle.builditbigger;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Layout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 
+import com.example.paskalstoyanov.androidjokelib.DisplayJokes;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -16,11 +22,17 @@ import com.google.android.gms.ads.InterstitialAd;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class MainActivityFragment extends Fragment {
+public class MainActivityFragment extends Fragment
+{
+    private static final String LOG_TAG = MainActivityFragment.class.getSimpleName();
+
 
     InterstitialAd mInterstitialAd;
+    EndpointsAsyncTask myTask;
+    static Context mContext;
 
-    Button tellJoke;
+    static Button tellJoke;
+    static View progressBar;
 
     public MainActivityFragment() {
     }
@@ -28,17 +40,24 @@ public class MainActivityFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+        final View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
+        mContext = getContext();
         tellJoke = (Button) rootView.findViewById(R.id.joke_button);
+        progressBar = rootView.findViewById(R.id.progress);
+        progressBar.setVisibility(View.INVISIBLE);
+        myTask = new EndpointsAsyncTask();
 
         tellJoke.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mInterstitialAd.isLoaded()) {
+                if (mInterstitialAd.isLoaded())
+                {
                     mInterstitialAd.show();
                 } else {
-                    new EndpointsAsyncTask().execute(getContext());
+                    progressBar.setVisibility(View.VISIBLE);
+                    myTask.execute(mContext);
+                    tellJoke.setVisibility(View.INVISIBLE);
                 }
             }
         });
@@ -67,6 +86,24 @@ public class MainActivityFragment extends Fragment {
         requestNewInterstitial();
 
         return rootView;
+    }
+
+    public static void ShowJoke_Success(String result)
+    {
+        tellJoke.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.INVISIBLE);
+        Intent tellJoke = new Intent(mContext, DisplayJokes.class);
+        tellJoke.putExtra(DisplayJokes.EXTRA_JOKEKEY, result);
+        tellJoke.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        mContext.startActivity(tellJoke);
+
+    }
+
+    public static void ShowJoke_Error(String result)
+    {
+        tellJoke.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.INVISIBLE);
+        Log.v(LOG_TAG, result);
     }
 
 

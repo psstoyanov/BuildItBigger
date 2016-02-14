@@ -21,9 +21,9 @@ import static android.support.v4.content.res.TypedArrayUtils.getString;
 /**
  * Created by paskalstoyanov on 11/02/16.
  */
-class EndpointsAsyncTask extends AsyncTask<Context, Long, String> {
+class EndpointsAsyncTask extends AsyncTask<Context, Long, EndpointsAsyncTask.WrapperOutput> {
 
-    private final String LOG_TAG = MainActivity.class.getSimpleName();
+    private final String LOG_TAG = EndpointsAsyncTask.class.getSimpleName();
 
 
     private static MyJokesApi myApiService = null;
@@ -31,7 +31,7 @@ class EndpointsAsyncTask extends AsyncTask<Context, Long, String> {
 
 
     @Override
-    protected String doInBackground(Context... params)
+    protected WrapperOutput doInBackground(Context... params)
     {
 
 
@@ -69,18 +69,47 @@ class EndpointsAsyncTask extends AsyncTask<Context, Long, String> {
 
 
         try {
-            return myApiService.getMyJokes().execute().getData();
+            WrapperOutput successful = new WrapperOutput(myApiService.getMyJokes().execute().getData(),true);
+            return successful;
         } catch (IOException e)
         {
-            return e.getMessage();
+            WrapperOutput failed = new WrapperOutput(e.getMessage(),false);
+            return failed;
         }
     }
 
     @Override
-    protected void onPostExecute(String result) {
-        Intent tellJoke = new Intent(context, DisplayJokes.class);
-        tellJoke.putExtra(DisplayJokes.EXTRA_JOKEKEY, result);
+    protected void onPostExecute(WrapperOutput output)
+    {
+        if(output.getWrapperSuccess() == true)
+        {
+            MainActivityFragment.ShowJoke_Success(output.getWrapperResult());
+        }
+        else
+        {
+            MainActivityFragment.ShowJoke_Error(output.getWrapperResult());
+        }
+        //Intent tellJoke = new Intent(context, DisplayJokes.class);
+        //tellJoke.putExtra(DisplayJokes.EXTRA_JOKEKEY, result);
         //tellJoke.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(tellJoke);
+        //context.startActivity(tellJoke);
+    }
+
+    class WrapperOutput
+    {
+        String results;
+        Boolean success;
+        public WrapperOutput( String result, Boolean success ) {
+            this.results = result;
+            this.success = success;
+        }
+        public boolean getWrapperSuccess()
+        {
+            return this.success;
+        }
+        public String getWrapperResult()
+        {
+            return this.results;
+        }
     }
 }

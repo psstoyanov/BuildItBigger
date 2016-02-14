@@ -41,18 +41,32 @@ public class EndpointsAsyncTaskTest extends AndroidTestCase {
 
     public void testSomeAsynTask() throws Throwable {
 
-        final EndpointsAsyncTask myTask = new EndpointsAsyncTask();
-        String result = null;
+        EndpointsAsyncTask myTask = new EndpointsAsyncTask();
+        EndpointsAsyncTask.WrapperOutput result = null;
 
         try {
             result = myTask.execute(getContext()).get();
-            Log.v(LOG_TAG, "result is : " + result);
         } catch (Exception e) {
             e.printStackTrace();
         } catch (Error e) {
             e.printStackTrace();
         }
-        assertNotNull(result);
+        assertEquals(true, result.getWrapperSuccess());
+        // Test if the joke was correct
+
+        // Currently, the EndpointsAsyncTask() needs alteration for the test to be correct.
+
+        //  .setRootUrl(myMode)  - should use "http://10.0.2.2:8080/_ah/api"
+        // onPostExecute   - comment out:
+        //             MainActivityFragment.ShowJoke_Success(output.getWrapperResult());
+        //            MainActivityFragment.ShowJoke_Error(output.getWrapperResult());
+        // respectively.
+        // Otherwise it gives, nullPointerException as it tries to access code
+        // from MainActivityFragment.
+
+
+
+
     }
 }
 
