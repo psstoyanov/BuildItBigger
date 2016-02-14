@@ -1,5 +1,6 @@
 package com.udacity.gradle.builditbigger;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -33,6 +34,7 @@ public class MainActivityFragment extends Fragment
 
     static Button tellJoke;
     static View progressBar;
+
 
     public MainActivityFragment() {
     }

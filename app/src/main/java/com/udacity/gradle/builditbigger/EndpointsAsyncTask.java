@@ -89,10 +89,6 @@ class EndpointsAsyncTask extends AsyncTask<Context, Long, EndpointsAsyncTask.Wra
         {
             MainActivityFragment.ShowJoke_Error(output.getWrapperResult());
         }
-        //Intent tellJoke = new Intent(context, DisplayJokes.class);
-        //tellJoke.putExtra(DisplayJokes.EXTRA_JOKEKEY, result);
-        //tellJoke.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        //context.startActivity(tellJoke);
     }
 
     class WrapperOutput

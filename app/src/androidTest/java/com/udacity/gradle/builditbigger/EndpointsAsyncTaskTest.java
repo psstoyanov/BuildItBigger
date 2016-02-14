@@ -17,56 +17,46 @@ import java.util.concurrent.TimeUnit;
 public class EndpointsAsyncTaskTest extends AndroidTestCase {
     private static final String LOG_TAG = EndpointsAsyncTaskTest.class.getName();
 
-    /*
-    I had trouble replicating solutions from:
-    http://stackoverflow.com/questions/2321829/android-asynctask-testing-with-android-test-framework
-    The runTestOnUiThread is called from an Activity.
-    This makes the solution more bloated than just testing the AsyncTask itself.
-    I went instead with a simpler solution.
-    In this stackoverflow thread, the OP needs to get the result from an AsyncTask:
-    http://stackoverflow.com/questions/12575068/how-to-get-the-result-of-onpostexecute-to-main-activity-because-asynctask-is-a
-    One of the answers gives a simplistic execution and return statement:
+    // Changed entirely the test function for the AsyncTask.
+    // Now the task is overriding the onPostExecute parameter.
+    // There is no need to change anything inside EndpointsAsyncTask.
+    // For some reason it is displayed as Terminated instead of failed/passed.
 
-    try {
-            String receivedData = new AsyncTask().execute("http://yourdomain.com/yourscript.php").get();
-        }
-        catch (ExecutionException | InterruptedException ei) {
-                ei.printStackTrace();
-        }
 
-    It doesn't require a running Activity or taking into account where the test AsyncTask is executed.
-    onPostExecute returns a String in the stackoverflow thread matching the one in EndpointsAsyncTask.
-    The only thing is to assert that the returned string is not null.
-    */
+    // Now it is follow the answer on this stackoverflow topic:
+    // http://stackoverflow.com/questions/2321829/android-asynctask-testing-with-android-test-framework
 
     public void testSomeAsynTask() throws Throwable {
 
-        EndpointsAsyncTask myTask = new EndpointsAsyncTask();
-        EndpointsAsyncTask.WrapperOutput result = null;
+        final CountDownLatch signal = new CountDownLatch(1);
 
+        final boolean[] test_variable = new boolean[1];
+        test_variable[0] = false;
+
+        final EndpointsAsyncTask myTask = new EndpointsAsyncTask()
+        {
+            @Override
+            protected void onPostExecute(WrapperOutput output) {
+                assertNotNull(output);
+                Log.v(LOG_TAG, output.getWrapperResult());
+                Log.v(LOG_TAG, String.valueOf(output.getWrapperSuccess()));
+                assertEquals(true,output.getWrapperSuccess());
+                test_variable[0] = output.getWrapperSuccess();
+                signal.countDown();
+            }
+        };
         try {
-            result = myTask.execute(getContext()).get();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } catch (Error e) {
-            e.printStackTrace();
+            myTask.execute(getContext());
+            signal.await();// wait for callback
         }
-        assertEquals(true, result.getWrapperSuccess());
-        // Test if the joke was correct
+        catch (InterruptedException e)
+        {
+            throw e;
+        }
 
-        // Currently, the EndpointsAsyncTask() needs alteration for the test to be correct.
-
-        //  .setRootUrl(myMode)  - should use "http://10.0.2.2:8080/_ah/api"
-        // onPostExecute   - comment out:
-        //             MainActivityFragment.ShowJoke_Success(output.getWrapperResult());
-        //            MainActivityFragment.ShowJoke_Error(output.getWrapperResult());
-        // respectively.
-        // Otherwise it gives, nullPointerException as it tries to access code
-        // from MainActivityFragment.
-
-
-
-
+        assertTrue("Happiness", true);
     }
+
+
 }
 
