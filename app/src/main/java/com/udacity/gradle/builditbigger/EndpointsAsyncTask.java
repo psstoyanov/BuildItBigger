@@ -41,7 +41,6 @@ class EndpointsAsyncTask extends AsyncTask<Context, Long, EndpointsAsyncTask.Wra
         String myMode = sharedPrefs.getString(
                 context.getString(R.string.pref_connection_mode_key),
                 context.getString(R.string.pref_mode_emulator));
-        Log.v(LOG_TAG, myMode);
 
 
 

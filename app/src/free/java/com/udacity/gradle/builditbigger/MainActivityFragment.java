@@ -48,7 +48,6 @@ public class MainActivityFragment extends Fragment
         tellJoke = (Button) rootView.findViewById(R.id.joke_button);
         progressBar = rootView.findViewById(R.id.progress);
         progressBar.setVisibility(View.INVISIBLE);
-        myTask = new EndpointsAsyncTask();
 
         tellJoke.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,6 +57,7 @@ public class MainActivityFragment extends Fragment
                     mInterstitialAd.show();
                 } else {
                     progressBar.setVisibility(View.VISIBLE);
+                    myTask = new EndpointsAsyncTask();
                     myTask.execute(mContext);
                     tellJoke.setVisibility(View.INVISIBLE);
                 }

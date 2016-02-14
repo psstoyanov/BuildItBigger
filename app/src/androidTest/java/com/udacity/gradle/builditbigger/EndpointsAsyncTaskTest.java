@@ -53,7 +53,6 @@ public class EndpointsAsyncTaskTest extends AndroidTestCase {
         {
             throw e;
         }
-
         assertTrue("Happiness", true);
     }
 
