@@ -3,6 +3,7 @@ package com.udacity.gradle.builditbigger;
 /**
  * Created by paskalstoyanov on 13/02/16.
  */
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.ListPreference;
@@ -20,7 +21,8 @@ import android.view.KeyEvent;
  * API Guide</a> for more information on developing a Settings UI.
  */
 public class SettingsActivity extends PreferenceActivity
-        implements Preference.OnPreferenceChangeListener {
+        implements Preference.OnPreferenceChangeListener
+{
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

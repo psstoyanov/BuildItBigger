@@ -18,13 +18,26 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+        qaTesting {
+            debuggable true
+        }
     }
     productFlavors {
         free {
-            applicationId "com.udacity.gradle.builditbigger.flavors.free"
+            applicationId "com.udacity.gradle.builditbigger.free"
         }
-        paid {
-            applicationId "com.udacity.gradle.builditbigger.flavors.paid"
+        pro {
+            applicationId "com.udacity.gradle.builditbigger.pro"
+        }
+    }
+
+    sourceSets {
+        free {
+            manifest.srcFile 'src/free/AndroidManifest.xml'
+            java.srcDirs = ['src/free/java']
+        }
+        pro {
+            java.srcDirs = ['src/pro/java']
         }
     }
     compileOptions {
@@ -48,8 +61,8 @@ dependencies {
     // Added for AdMob
     // Specify to use only ads instead of all libs.
     // Reducing size and doesn't need multiDexEnabled.
-    compile 'com.android.support:appcompat-v7:23.1.1'
-    compile 'com.google.android.gms:play-services-ads:8.4.0'
     compile project(path: ':backend', configuration: 'android-endpoints')
     testCompile 'junit:junit:4.12'
+    compile 'com.android.support:appcompat-v7:23.1.1'
+    freeCompile 'com.google.android.gms:play-services-ads:8.4.0'
 }

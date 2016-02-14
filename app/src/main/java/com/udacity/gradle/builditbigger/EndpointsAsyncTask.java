@@ -22,6 +22,10 @@ import static android.support.v4.content.res.TypedArrayUtils.getString;
  * Created by paskalstoyanov on 11/02/16.
  */
 class EndpointsAsyncTask extends AsyncTask<Context, Long, String> {
+
+    private final String LOG_TAG = MainActivity.class.getSimpleName();
+
+
     private static MyJokesApi myApiService = null;
     private Context context;
 
@@ -32,6 +36,12 @@ class EndpointsAsyncTask extends AsyncTask<Context, Long, String> {
 
 
         context = params[0];
+        SharedPreferences sharedPrefs =
+                PreferenceManager.getDefaultSharedPreferences(context);
+        String myMode = sharedPrefs.getString(
+                context.getString(R.string.pref_connection_mode_key),
+                context.getString(R.string.pref_mode_emulator));
+        Log.v(LOG_TAG, myMode);
 
 
 
@@ -42,7 +52,7 @@ class EndpointsAsyncTask extends AsyncTask<Context, Long, String> {
                     // - 10.0.2.2 is localhost's IP address in Android emulator
                     // - turn off compression when running against local devappserver
                     // - use the PC/Mac IP address when testing with actual device
-                    .setRootUrl("http://10.0.2.2:8080/_ah/api")
+                    .setRootUrl(myMode)
                     // Used ifconfig -a on localhost to find IP address (*Unix system)
                     //.setRootUrl("http://192.168.1.240:8080/_ah/api/")
                     .setGoogleClientRequestInitializer(new GoogleClientRequestInitializer() {
