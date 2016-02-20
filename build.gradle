@@ -25,19 +25,37 @@ allprojects {
 
 
 
-evaluationDependsOn ":app"
-evaluationDependsOn ":backend"
-
-project(":backend") {
-    appengine {
-        daemon true
-    }
-}
-
-task runAppEngineAndTest(dependsOn: ":backend:appengineRun") {}
 
 task stopappEngine(dependsOn: ":backend:appengineStop") {}
 task removeOldInstalls(dependsOn: ":app:uninstallAll") {}
-runAppEngineAndTest.finalizedBy([":app:connectedAndroidTest", ":backend:appengineStop"])
 
 
+task runAppEngine(dependsOn: ":backend:appengineRun") {
+    evaluationDependsOn ":backend"
+
+    project(":backend") {
+        appengine {
+            daemon true
+        }
+    }
+
+    doLast {
+        println "App engine is on!"
+    }
+}
+
+task runTests(dependsOn: ":app:connectedAndroidTest") {
+    evaluationDependsOn ":app"
+    doLast {
+        println "All tests done"
+    }
+}
+
+task runAppEngineTestAndStop(dependsOn: ":backend:appengineStop") {
+    doLast {
+        println "Jobs done and engine stopped"
+    }
+}
+runAppEngineTestAndStop.dependsOn runTests
+runAppEngineTestAndStop.dependsOn runAppEngine
+runTests.mustRunAfter runAppEngine
