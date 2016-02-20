@@ -6,8 +6,6 @@ import com.google.api.server.spi.config.ApiNamespace;
 
 import java.util.logging.Logger;
 
-import javax.inject.Named;
-
 /**
  * An endpoint class we are exposing
  */

@@ -1,15 +1,9 @@
 package com.udacity.gradle.builditbigger;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
 import android.test.AndroidTestCase;
 import android.util.Log;
 
-import com.example.paskalstoyanov.androidjokelib.DisplayJokes;
-
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by paskalstoyanov on 13/02/16.
@@ -53,6 +47,7 @@ public class EndpointsAsyncTaskTest extends AndroidTestCase {
         {
             throw e;
         }
+        assertTrue(test_variable[0]);
         assertTrue("Happiness", true);
     }
 

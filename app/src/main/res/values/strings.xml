@@ -10,7 +10,7 @@
     <string name="pref_mode_label_emulator">Emulator</string>
     <string name="pref_mode_label_usb_device">USB device</string>
     <string name="pref_connection_mode_key" translatable="false">mode</string>
-    
+
     <string name="pref_mode_emulator">http://10.0.2.2:8080/_ah/api</string>
     <!-- Use your localhost when testing the backend.-->
     <!-- To find the localhost IP- "ifconfig -a" for *Unix system. -->

@@ -1,13 +1,10 @@
 package com.udacity.gradle.builditbigger;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
-import com.example.paskalstoyanov.androidjokelib.DisplayJokes;
 import com.example.paskalstoyanov.myapplication.backend.myJokesApi.MyJokesApi;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
@@ -15,8 +12,6 @@ import com.google.api.client.googleapis.services.AbstractGoogleClientRequest;
 import com.google.api.client.googleapis.services.GoogleClientRequestInitializer;
 
 import java.io.IOException;
-
-import static android.support.v4.content.res.TypedArrayUtils.getString;
 
 /**
  * Created by paskalstoyanov on 11/02/16.
@@ -80,7 +75,7 @@ class EndpointsAsyncTask extends AsyncTask<Context, Long, EndpointsAsyncTask.Wra
     @Override
     protected void onPostExecute(WrapperOutput output)
     {
-        if(output.getWrapperSuccess() == true)
+        if(output.getWrapperSuccess())
         {
             MainActivityFragment.ShowJoke_Success(output.getWrapperResult());
         }

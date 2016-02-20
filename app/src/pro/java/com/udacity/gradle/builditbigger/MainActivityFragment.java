@@ -58,6 +58,7 @@ public class MainActivityFragment extends Fragment {
         Intent tellJoke = new Intent(mContext, DisplayJokes.class);
         tellJoke.putExtra(DisplayJokes.EXTRA_JOKEKEY, result);
         tellJoke.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
         mContext.startActivity(tellJoke);
 
     }
