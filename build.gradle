@@ -24,7 +24,8 @@ allprojects {
 }
 
 
-
+// Lots of inspiration and Groovy puzzle solving from:
+// https://discussions.udacity.com/t/last-optional-step-how-to-start-an-external-module-task-from-the-root-build-gradle/24211/17
 // Manual stopappEngine task and removeOldInstalls.
 // They will be visible close to the compound task
 // and save time when an error occurs with the app engine
