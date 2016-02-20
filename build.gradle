@@ -25,37 +25,46 @@ allprojects {
 
 
 
-
+// Manual stopappEngine task and removeOldInstalls.
+// They will be visible close to the compound task
+// and save time when an error occurs with the app engine
+// continuing to run in background (JNI timeout for test installation
+// is possible problem).
 task stopappEngine(dependsOn: ":backend:appengineStop") {}
 task removeOldInstalls(dependsOn: ":app:uninstallAll") {}
 
+// Moved evaluationDependsOn outside of the tasks
+evaluationDependsOn ":app"
+evaluationDependsOn ":backend"
+
+project(":backend") {
+    appengine {
+        daemon true
+    }
+}
 
 task runAppEngine(dependsOn: ":backend:appengineRun") {
-    evaluationDependsOn ":backend"
-
-    project(":backend") {
-        appengine {
-            daemon true
-        }
-    }
+    description 'Starts App Engine local server in daemon. Needs to be done first.'
 
     doLast {
         println "App engine is on!"
     }
 }
 
-task runTests(dependsOn: ":app:connectedAndroidTest") {
-    evaluationDependsOn ":app"
+task runTests(dependsOn: ":app:check") {
+    description 'Runs all tests for the app. This includes connectedAndroidTests.'
     doLast {
-        println "All tests done"
+        println "All tests have passed!"
     }
 }
 
 task runAppEngineTestAndStop(dependsOn: ":backend:appengineStop") {
+    description 'Compound task. Runs app engine, makes the tests and stops the app engine.'
     doLast {
-        println "Jobs done and engine stopped"
+        println "Jobs done and engine stopped!"
     }
 }
+// Enforcing the tasks order.
 runAppEngineTestAndStop.dependsOn runTests
 runAppEngineTestAndStop.dependsOn runAppEngine
 runTests.mustRunAfter runAppEngine
